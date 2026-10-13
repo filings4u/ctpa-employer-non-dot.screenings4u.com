@@ -9,7 +9,7 @@ if(localStorage.getItem('s4u_workforce_storage_schema')!==STORAGE_SCHEMA){
   localStorage.setItem('s4u_workforce_storage_schema',STORAGE_SCHEMA);
 }
 const auth=window.S4UAuth;
-const FONT_KEY='s4u_employer_nondot_font_size_v2';
+const FONT_KEY='s4u_ctpa_employer_nondot_font_size_v2';
 const FONT_DEFAULT=14,FONT_MIN=12,FONT_MAX=18;
 function readFontSize(){const n=Number(localStorage.getItem(FONT_KEY));return Number.isFinite(n)?Math.min(FONT_MAX,Math.max(FONT_MIN,n)):FONT_DEFAULT}
 function applyFontSize(n){const v=Math.min(FONT_MAX,Math.max(FONT_MIN,Number(n)||FONT_DEFAULT));document.documentElement.style.setProperty('--portal-font-root',v+'px');localStorage.setItem(FONT_KEY,String(v));const label=document.getElementById('fontSizeValue');if(label)label.textContent=v===FONT_DEFAULT?'Default':String(v);return v}
@@ -70,17 +70,17 @@ async function invoke(name,body={}){
 window.Portal={invoke};
 const GUIDE_CATALOG_URL=C.workforceUrl+'/functions/v1/guide-catalog-public';
 async function publicGuideCatalog(){
-  const r=await fetch(GUIDE_CATALOG_URL,{method:'POST',headers:{'Content-Type':'application/json','apikey':C.workforceKey},body:JSON.stringify({action:'list_guides',portal_code:'nondot_employer'})});
+  const r=await fetch(GUIDE_CATALOG_URL,{method:'POST',headers:{'Content-Type':'application/json','apikey':C.workforceKey},body:JSON.stringify({action:'list_guides',portal_code:'nondot_ctpa_employer'})});
   const d=await r.json().catch(()=>({}));if(!r.ok||d.error)throw new Error(d.error||'Unable to load how-to guides.');return d.guides||[];
 }
-async function onboardingState(action='get',metadata={}){return invoke('portal-onboarding-state',{action,portal_code:'nondot_employer',metadata})}
+async function onboardingState(action='get',metadata={}){return invoke('portal-onboarding-state',{action,portal_code:'nondot_ctpa_employer',metadata})}
 const guideGroup=g=>{const raw=String(g.category||'').toLowerCase(),t=String(g.title||'').toLowerCase();if(/company|account|profile|contact/.test(raw+' '+t))return'Company Setup';if(/people|employee|staff|driver/.test(raw+' '+t))return'People';if(/program/.test(raw+' '+t))return'Programs';if(/test|order|collection/.test(raw+' '+t))return'Testing';if(/result/.test(raw+' '+t))return'Results';if(/document|upload|file/.test(raw+' '+t))return'Documents';if(/bill|invoice|payment/.test(raw+' '+t))return'Billing';return'Support'};
 window.openHowToGuide=function(url){
   const w=window.open(url,'s4uHowToGuide');
   if(w) try{w.opener=window}catch{}
 };
 function guideCard(g){
-  const guideUrl='https://guides.screenings4u.com/public-guide.html?id='+encodeURIComponent(g.id)+'&portal='+encodeURIComponent(C.portalCode||'nondot_employer')+'&return_to='+encodeURIComponent(location.href);
+  const guideUrl='https://guides.screenings4u.com/public-guide.html?id='+encodeURIComponent(g.id)+'&portal='+encodeURIComponent(C.portalCode||'ctpa_employer_workforce')+'&return_to='+encodeURIComponent(location.href);
   return `<article class="howto-card" data-guide-card data-search="${esc([g.title,g.intro,g.category].join(' ').toLowerCase())}"><span class="howto-kicker">${esc(guideGroup(g))}</span><h3>${esc(g.title||'How-To Guide')}</h3><p>${esc(g.intro||'Step-by-step instructions for this portal task.')}</p><div class="howto-meta"><span>${esc(g.audience||'Customer')}</span><span>v${Number(g.version||1)}</span></div><button class="btn ghost" type="button" onclick="window.openHowToGuide('${guideUrl.replace(/'/g,"&#39;")}')">Open Guide</button></article>`
 }
 async function access(){return invoke(apiName(),{action:'session_context',portal_code:C.portalCode,requested_portal_code:C.portalCode,requested_page:page()})}
