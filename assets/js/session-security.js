@@ -1,14 +1,4 @@
-/* Sponsored employers cannot inherit direct employer permissions. Fail closed until the sponsor-scoped authorization endpoint is verified. */
-if(window.PORTAL_CONFIG?.portalCode==='ctpa_employer_workforce'){
-  const path=location.pathname.split('/').pop()||'index.html';
-  if(!['index.html','auth-handoff.html','login.html','404.html','forgot-password.html','reset-password.html'].includes(path)){
-    document.documentElement.classList.remove('s4u-auth-pending');
-    document.addEventListener('DOMContentLoaded',()=>{
-      document.body.className='login-page';
-      document.body.innerHTML='<main class="login-card"><h1>C/TPA-sponsored access pending</h1><p>This sponsored employer portal is temporarily restricted while sponsor-assigned permissions are being configured. Direct employer access does not apply here.</p><a href="https://portal.screenings4u.com/selector.html">Switch Portal</a></main>';
-    },{once:true});
-    window.S4UAuthReady=Promise.reject(new Error('Sponsored employer permission verification is required.'));
-    window.S4UAuthReady.catch(()=>{});
+(()=>{});
   }
 }
 (()=>{"use strict";
