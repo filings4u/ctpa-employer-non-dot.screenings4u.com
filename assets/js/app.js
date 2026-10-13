@@ -1,10 +1,4 @@
 (()=>{'use strict';
-if(window.PORTAL_CONFIG?.portalCode==='ctpa_employer_workforce'){
-  const show=()=>{document.body.className='login-page';document.body.innerHTML='<main class="login-card"><h1>Sponsored employer access restricted</h1><p>This portal requires explicit permissions assigned by your sponsoring C/TPA. Direct Employer features and data are not available under this login.</p><a class="btn primary" href="https://portal.screenings4u.com/selector.html">Switch Portal</a></main>';};
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',show,{once:true});else show();
-  return;
-}
-
 const C=window.PORTAL_CONFIG;
 const STORAGE_SCHEMA='workforce-nondot-separated-v4';
 if(localStorage.getItem('s4u_workforce_storage_schema')!==STORAGE_SCHEMA){
